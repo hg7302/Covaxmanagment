@@ -1,0 +1,248 @@
+Create the table definitions
+
+CREATE TABLE Employee(
+Fname       VARCHAR(20) NOT NULL,
+Minit       VARCHAR(1),
+Lname       VARCHAR(20) NOT NULL,
+Ssn         CHAR(9)     PRIMARY KEY,
+Bdate       DATE,
+Address     VARCHAR(30),
+Sex         CHAR(1),
+Salary      NUMERIC(10,2),
+Super_ssn   CHAR(9)     REFERENCES Department(Mgr_ssn),
+Dno         INTEGER     REFERENCES Department(Dnumber),
+);
+
+CREATE TABLE Department(
+Dname       VARCHAR(15) NOT NULL,
+Dnumber     INTEGER     PRIMARY KEY,
+Mgr_ssn     CHAR(9),
+Mgr_start_date  DATE,
+);
+
+CREATE TABLE Dept_Locations(
+Dnumber     INTEGER     REFERENCES Department,
+Dlocation   VARCHAR(20),
+
+PRIMARY KEY (Dnumber, Dlocation)
+);
+
+CREATE TABLE Project(
+Pname       VARCHAR(20) NOT NULL,
+Pnumber     INTEGER     PRIMARY KEY,
+Plocation   VARCHAR(20),
+Dnum        INTEGER     REFERENCES Department,
+);
+
+CREATE TABLE Works_On(
+Essn    CHAR(9)     REFERENCES Employee(Ssn),
+Pno     INTEGER     REFERENCES Project(Pnumber),
+Hours   NUMERIC(2,1),
+
+PRIMARY KEY(Essn, Pno)
+);
+
+CREATE TABLE Dependent(
+Essn        CHAR(9)     REFERENCES Employee(Ssn),
+Dependent_name  VARCHAR(20) NOT NULL,
+Sex     CHAR(1),
+Bdate       DATE,
+Relationship    VARCHAR(20),
+
+PRIMARY KEY(Essn, Dependent_name)
+);
+
+
+
+
+#Insert records into the tables
+
+INSERT INTO Employee
+Values
+('John',    'B','Smith',  '123456789','1965-01-09','731 Fondren, Houston,     TX','M',30000,'333445555',5),
+('Franklin','T','Wong',   '333445555','1955-12-08','638 Voss, Houston, TX',       'M',40000,'888665555',5),
+('Alicia',  'J','Zelaya', '999887777','1968-01-19','3321 Castle, Spring,     TX', 'F',25000,'987654321',4),
+('Jennifer','S','Wallace','987654321','1941-06-20','291 Berry, Bellaire, TX', 'F',43000,'888665555',4),
+('Ramesh',  'K','Narayan','666884444','1962-09-15','975 Fire Oak, Humble, TX','M',38000,'333445555',5),
+('Joyce',   'A','English','453453453','1972-07-31','5631 Rice, Houston, TX',  'F',25000,'333445555',5),
+('Ahmad',   'V','Jabbar', '987987987','1969-03-29','980 Dallas, Houston, TX', 'M',25000,'987654321',4),
+('James',   'E','Borg',   '888665555','1937-11-10','450 Stone, Houston, TX',  'M',55000, NULL,      1);
+
+INSERT INTO Department
+Values
+('Research',      5,'333445555','1988-05-22'),
+('Administration',4,'987654321', '1995,01,01'),
+('Headquarters',  1,'888665555','1981-06-19');
+
+INSERT INTO Dept_Locations
+Values
+(1,'Houston'),
+(4,'Stafford'),
+(5,'Bellaire'),
+(5,'Sugarland'),
+(5,'Houston');
+
+INSERT INTO Project
+Values
+('ProductX',        1,'Bellaire', 5),
+('ProductY',        2,'Sugarland',5),
+('ProductZ',        3,'Houston',  5),
+('Computerization',10,'Stafford', 4),
+('Reorganization', 20,'Houston',  1),
+('Newbenefits',    30,'Stafford', 4);
+
+INSERT INTO Works_On
+Values
+('123456789', 1,32.5),
+('123456789', 2, 7.5),
+('666884444', 3,40.0),
+('453453453', 1,20.0),
+('453453453', 2,20.0),
+('333445555', 2,10.0),
+('333445555', 3,10.0),
+('333445555',10,10.0),
+('333445555',20,10.0),
+('999887777',30,30.0),
+('999887777',10,10.0),
+('987987987',10,35.0),
+('987987987',30, 5.0),
+('987654321',30,20.0),
+('987654321',20,15.0),
+('888665555',20,NULL);
+
+INSERT INTO Dependent
+Values
+('333445555','Alice',    'F','1986-04-05','Daughter'),
+('333445555','Theodore', 'M','1983-10-25','Son'),
+('333445555','Joy',      'F','1958-05-03','Spouse'),
+('987654321','Abner',    'M','1942-02-28','Spouse'),
+('123456789','Michael',   'M','1988-01-04','Son'),
+('123456789','Alice',    'F','1988-12-30','Daughter'),
+('123456789','Elizabeth','F','1967-05-05','Spouse');
+
+
+
+
+#Show values in all tables
+
+SELECT *
+FROM Employee;
+
+SELECT *
+FROM Department;
+
+SELECT *
+FROM Dept_Locations;
+
+SELECT *
+FROM Project;
+
+SELECT *
+FROM Works_On;
+
+SELECT *
+FROM Dependent; 
+
+
+
+
+#Implement queries from Exercise 8.16
+#a)
+SELECT  E.Fname, E.Lname
+FROM    Employee E, Works_On W, Project P
+WHERE   E.Ssn = W.Essn  and
+        P.Pnum = W.Pno  and
+        E.Dno = 5       and
+        P.Pname = 'ProjectX' and
+        W.Hours > 10.0; 
+
+#b)
+SELECT  E.Fname, E.Lname
+FROM    Employee E, Dependent D
+WHERE   E.Ssn = D.Essn  and
+        E.Fname = D.Dependent_name;
+
+#c)
+SELECT  Fname, Lname
+FROM    Employee
+WHERE   Super_ssn = (SELECT  Ssn
+             FROM    Employee
+             WHERE   Fname = 'Franklin' and
+                     Lname = 'Wong');
+
+#d)
+SELECT   SUM(W.Hours)
+FROM     Project P, Works_On W
+WHERE    P.Pnumber = W.Pno
+GROUP BY P.Pname;
+
+#e)
+SELECT  E.Fname, E.Lname
+FROM    Employee E
+WHERE   NOT EXISTS
+    (SELECT  P.Pnumber
+     FROM    Project P
+     WHERE   P.Pnumber NOT IN
+             (SELECT  W.Pno
+              FROM    Works_On W
+              WHERE   W.Essn = E.Ssn));
+
+#f)
+SELECT  E.Fname, E.Lname
+FROM    Employee E
+WHERE   EXISTS
+        (E.Essn
+
+         MINUS
+
+         SELECT  [Distinct] W.Essn
+         FROM    Works_On W
+        );
+
+#g)
+SELECT   AVG(E.Salary)
+FROM     Employee E, Department D
+WHERE    E.Dno = D.Dnumber
+GROUP BY D.Dname;
+
+#h)
+SELECT   AVG(Salary)
+FROM     Employee
+WHERE    Sex = 'F'
+GROUP BY Sex;
+
+#i)
+SELECT  E.Fname, E.Lname, E.Address
+FROM    Employee E
+WHERE   EXISTS
+        (SELECT  P.Pnumber
+         FROM    Project P, Works On W
+         WHERE   P.Pnumber = W.Pno     and
+                 W.Essn = E.Ssn        and
+                 Plocation = 'Houston' and
+                 NOT EXISTS
+                 (SELECT  Dl.Dnumber
+                  FROM    Dept_Locations Dl
+                  WHERE   Dl.Dlocation = 'Houston' and
+                          E.Dno = Dl.Dnumber));
+
+#j)
+SELECT  E.Lname
+FROM    Employee E, Department De
+WHERE   De.Mgr_ssn = E.Ssn and
+        NOT EXISTS
+        (SELECT  Dp.Essn
+         FROM    Dependent Dp
+         WHERE   Dp.Essn = E.Ssn);
+
+
+
+
+#Drop all tables
+
+DROP TABLE Dependent      RESTRICT;
+DROP TABLE Works_On       RESTRICT;
+DROP TABLE Project        RESTRICT;
+DROP TABLE Dept_Locations RESTRICT;
+DROP TABLE Department     RESTRICT;
+DROP TABLE Employee       CASCADE;
