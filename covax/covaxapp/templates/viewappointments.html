@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+<style>
+		body,
+		html {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			 background-image: url('{% static "4.jpg" %}');
+			 background-repeat: no-repeat;
+			 background-size:100% 100%;
+
+		}
+
+.container5 .btn {
+  position:absolute ;
+  top: 5%;
+  left: 5%;
+
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+ background-color: white;
+  color: black;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.container5.btn{padding: 14px 70px;}
+.container5 .btn:hover {
+  background-color: #87CEFA;
+}
+		.user_card {
+			width: 100%;
+			margin-top: auto;
+			margin-bottom: auto;
+			position: relative;
+			display: flex;
+			justify-content: center;
+			flex-direction: column;
+			padding: 10px;
+			border-radius: 5px;
+		}
+		.form_container {
+
+			margin-top: 20px;
+		}
+
+		#form-title{
+		text-align:center;
+			color: black;
+
+		}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 80%;
+margin-left : 10%
+
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+   background-color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+<!-- <div class="container5">
+
+      <a href="{% url 'user' %}"> <button class="btn"><b>Back</b></button></a>
+
+    </div>-->
+<div class="user_card">
+				<div class="d-flex justify-content-center">
+					<h1 id="form-title" style="font-size: 2.5em;"><b><u>Appointments</u></b></h1>
+				</div>
+			</div>
+			<table border="1">
+				<tr>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Appointment ID</th>
+					<th>AAdhar Id</th>
+					<th>Appointment Time</th>
+					<th>Appointment Date</th>
+					<th>Vaccine Name</th>
+				</tr>
+				{% if appValue %}
+					{% for i in appValue %}
+						<tr>
+							<td>{{ i.First_name }}</td>
+							<td>{{ i.Last_name}}</td>
+							<td>{{ i.appointment_id}}</td>
+							<td>{{ i.Cid}}</td>
+							<td>{{ i.ATime}}</td>
+							<td>{{ i.Adate }}</td>
+							<td>{{ i.Vname }}</td>
+
+						</tr>
+					{% endfor %}
+				{% endif %}
+			</table>
+		</div>
+
+
+</body>
+</html>

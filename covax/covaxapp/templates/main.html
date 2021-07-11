@@ -1,0 +1,92 @@
+<!--Main Navigation-->
+  <header>
+
+ <form method="POST" action="{% url 'user' %}">
+            {% csrf_token %}
+            <div class="container">
+                <button type="submit" class="btn"><b>User</b></button>
+            </div>
+        </form>
+
+
+ <form method="POST" action="{% url 'myadmin' %}">
+            {% csrf_token %}
+            <div class="container2">
+                <button type="submit" class="btn"><b>Admin</b></button>
+            </div>
+        </form>
+    <!--<div class="container2">
+
+      <a href='myadmin'> <button class="btn"><b>Admin</b></button></a>
+
+    </div>-->
+
+    <style>
+    {% load static %}
+    .container .btn {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: white;
+  color: black;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.container {padding: 14px 40px;}
+.container .btn{padding: 14px 85px;}
+.container .btn:hover {
+  background-color: #87CEFA;
+
+}
+
+.container2 .btn {
+  position:absolute ;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+ background-color: white;
+  color: black;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+.container2 .btn{padding: 14px 80px;}
+.container2 .btn:hover {
+  background-color: #87CEFA;
+}
+      #intro {
+        background-image: url('{% static "6.jpg" %}');
+         background-repeat: no-repeat;
+
+   background-size: 100% 100%;
+        height: 100vh;
+      }
+
+      /* Height for devices larger than 576px */
+      @media (min-width: 992px) {
+        #intro {
+          margin-top: -65.59px;
+        }
+      }
+}
+    </style>
+    <!-- Background image -->
+    <div id="intro" class="bg-image shadow-2-strong">
+
+      <div class="mask" style="background-color: rgba(0, 0, 0, 0.8);">
+
+
+        <div class="container d-flex align-items-center justify-content-center text-center h-100">
+        </div>
+      </div>
+    </div>
+    <!-- Background image -->
+  </header>
