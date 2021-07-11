@@ -1,0 +1,16 @@
+@import url(https://fonts.googleapis.com/css?family=Poppins);
+
+
+.wave{
+    position: fixed;
+    height: 150%;
+    left:0;
+    bottom:0;
+    z-index:-1;
+}
+body {
+  font-family: "Poppins", sans-serif;
+}
+.light-blue-gradient {
+  background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+}
